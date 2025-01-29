@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscador de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .search-container {
+            margin-bottom: 20px;
+        }
+        #searchInput {
+            padding: 10px;
+            width: 300px;
+            margin-bottom: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Buscar producto, peso o precio...">
+    </div>
+    
+    <table id="productTable">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Peso</th>
+                <th>Precio</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+            <!-- Los productos se insertarán aquí -->
+        </tbody>
+    </table>
+
+    <script>
+        // Datos actualizados
+        const products = [
+            {nombre: 'Arroz', peso: '1kg', precio: '60 Bs'},
+            {nombre: 'Caraotas', peso: 'Medio kilo', precio: '75 Bs'},
+            {nombre: 'Caraotas', peso: '1kg', precio: '150 Bs'},
+            {nombre: 'Pasta corta', peso: '1kg', precio: '90 Bs'},
+            {nombre: 'Pasta corta', peso: 'Medio kilo', precio: '50 Bs'},
+            {nombre: 'Pasta larga', peso: '1kg', precio: '60 Bs'},
+            {nombre: 'Pasta larga', peso: 'Medio kilo', precio: '40 Bs'},
+            {nombre: 'Sal', peso: '1kg', precio: '20 Bs'},
+            {nombre: 'Sal', peso: 'Medio kilo', precio: '10 Bs'},
+            {nombre: 'Harina de trigo', peso: '1kg', precio: '70 Bs'},
+            {nombre: 'Harina de trigo', peso: 'Medio kilo', precio: '35 Bs'},
+            {nombre: 'Azúcar', peso: '1kg', precio: '80 Bs'},
+            {nombre: 'Azúcar', peso: 'Medio kilo', precio: '40 Bs'},
+            {nombre: 'Lentejas', peso: '1kg', precio: '180 Bs'},
+            {nombre: 'Lentejas', peso: 'Medio kilo', precio: '90 Bs'},
+            {nombre: 'Pan', peso: 'Unidad', precio: '60 Bs'},
+            {nombre: 'Huevo', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Costero', peso: 'Caja', precio: '60 Bs'},
+            {nombre: 'Costero', peso: 'Unidad', precio: '3 Bs'},
+            {nombre: 'Ultra Buy', peso: 'Caja', precio: '45 Bs'},
+            {nombre: 'Ultra Buy', peso: 'Unidad', precio: '2.50 Bs'},
+            {nombre: 'Vicerroy', peso: 'Caja', precio: '120 Bs'},
+            {nombre: 'Vicerroy', peso: 'Media caja', precio: '60 Bs'},
+            {nombre: 'Vicerroy', peso: '3x20', precio: '20 Bs'},
+            {nombre: 'Vicerroy', peso: '2x15', precio: '15 Bs'},
+            {nombre: 'Vicerroy', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Consul', peso: 'Caja', precio: '100 Bs'},
+            {nombre: 'Consul', peso: 'Medio', precio: '50 Bs'},
+            {nombre: 'Consul', peso: 'Unidad', precio: '5 Bs'},
+            {nombre: 'Chimo', peso: 'Unidad', precio: '20 Bs'},
+            {nombre: 'Leche condensada', peso: 'Unidad', precio: '90 Bs'},
+            {nombre: 'Aceite', peso: 'Litro', precio: '130 Bs'},
+            {nombre: 'Aceite', peso: 'Medio litro', precio: '80 Bs'},
+            {nombre: 'Aceite', peso: 'Teta', precio: '25 Bs'},
+            {nombre: 'Leche Purelac', peso: '200g', precio: '110 Bs'},
+            {nombre: 'Leche Dobon', peso: '200g', precio: '140 Bs'},
+            {nombre: 'Lucky Strike', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Lucky Strike', peso: 'Caja', precio: '180 Bs'},
+            {nombre: 'Pallmar', peso: 'Caja', precio: '160 Bs'},
+            {nombre: 'Pallmar', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Jabón Médico', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Jabón Anita', peso: 'Pequeño', precio: '35 Bs'},
+            {nombre: 'Jabón Anita', peso: 'Grande', precio: '60 Bs'},
+            {nombre: 'Jabón Especial', peso: 'Unidad', precio: '50 Bs'},
+            {nombre: 'Las Llaves Panela', peso: 'Unidad', precio: '55 Bs'},
+            {nombre: 'Rombo', peso: 'Unidad', precio: '30 Bs'},
+            {nombre: 'Popular', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Dolphin Ace', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Dolphin Panela', peso: 'Unidad', precio: '50 Bs'},
+            {nombre: 'Ranchero de Coco', peso: 'Unidad', precio: '60 Bs'},
+            {nombre: 'Salsa de Tomate', peso: 'Pequeña', precio: '80 Bs'},
+            {nombre: 'Salsa de Tomate', peso: 'Grande', precio: '140 Bs'},
+            {nombre: 'Mayonesa', peso: 'Pequeña', precio: '120 Bs'},
+            {nombre: 'Mayonesa', peso: 'Grande', precio: '230 Bs'},
+            {nombre: 'Cloro', peso: 'Pequeño', precio: '75 Bs'},
+            {nombre: 'Cloro', peso: 'Grande', precio: '100 Bs'},
+            {nombre: 'Axion', peso: 'Unidad', precio: '50 Bs'},
+            {nombre: 'Suavitel', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Fabuloso', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Crema de Arroz', peso: 'Unidad', precio: '50 Bs'},
+            {nombre: 'Desodorante', peso: 'Unidad', precio: '25 Bs'},
+            {nombre: 'Avena', peso: 'Grande', precio: '70 Bs'},
+            {nombre: 'Avena', peso: 'Pequeña', precio: '40 Bs'},
+            {nombre: 'Maizena', peso: 'Pequeña', precio: '45 Bs'},
+            {nombre: 'Maizena', peso: 'Grande', precio: '80 Bs'},
+            {nombre: 'Café', peso: '200g', precio: '120 Bs'},
+            {nombre: 'Café', peso: '100g', precio: '60 Bs'},
+            {nombre: 'Café', peso: '50g', precio: '30 Bs'},
+            {nombre: 'Tostón', peso: 'Unidad', precio: '35 Bs'},
+            {nombre: 'Harina Pan', peso: 'Unidad', precio: '60 Bs'},
+            {nombre: 'Queso', peso: 'Unidad', precio: '320 Bs'},
+            {nombre: 'Refresco', peso: 'Unidad', precio: '60 Bs'},
+            {nombre: 'Refresco', peso: 'Pequeño', precio: '25 Bs'},
+            {nombre: 'Sardina', peso: 'Unidad', precio: '35 Bs'},
+            {nombre: 'Atún', peso: 'Unidad', precio: '90 Bs'},
+            {nombre: 'Champú', peso: 'Unidad', precio: '25 Bs'},
+            {nombre: 'Nutribela', peso: 'Unidad', precio: '30 Bs'},
+            {nombre: 'Pañales', peso: 'Unidad', precio: '20 Bs'},
+            {nombre: 'Pañales', peso: 'Paquete', precio: '260 Bs'},
+            {nombre: 'Harina Kaly', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Harina Doña Belén', peso: 'Unidad', precio: '45 Bs'},
+            {nombre: 'Caramelos', peso: 'Unidad', precio: '2 Bs'},
+            {nombre: 'Samba y Cocosete', peso: 'Unidad', precio: '50 Bs'},
+            {nombre: 'Rico', peso: 'Unidad', precio: '40 Bs'},
+            {nombre: 'Doritos y Chistris', peso: 'Pequeño', precio: '55 Bs'},
+            {nombre: 'Dorito', peso: 'Grande', precio: '160 Bs'},
+            {nombre: 'Chistris', peso: 'Grande', precio: '130 Bs'},
+            {nombre: 'Mavesa', peso: 'Unidad', precio: '80 Bs'},
+            {nombre: 'Neli', peso: 'Unidad', precio: '70 Bs'},
+            {nombre: 'Deline', peso: 'Unidad', precio: '65 Bs'},
+            {nombre: 'Aliño Preparado', peso: 'Grande', precio: '20 Bs'},
+            {nombre: 'Papeleta de Condimentos', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Freegel, Biancha, Boca', peso: 'Unidad', precio: '20 Bs'},
+            {nombre: 'Cochinito', peso: 'Pequeño', precio: '15 Bs'},
+            {nombre: 'Cochinito', peso: 'Familiar', precio: '40 Bs'},
+            {nombre: 'Ronaldo', peso: 'Unidad', precio: '150 Bs'},
+            {nombre: 'Deleitinas', peso: 'Unidad', precio: '30 Bs'},
+            {nombre: 'Galletas Cool', peso: 'Unidad', precio: '35 Bs'},
+            {nombre: 'Amoxixilina y Operan', peso: 'Unidad', precio: '15 Bs'},
+            {nombre: 'Acetaminofén', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Tomates, Papas, Cebollas', peso: 'Unidad', precio: '180 Bs'},
+            {nombre: 'Boka', peso: 'Unidad', precio: '20 Bs'},
+            {nombre: 'Pega Loka', peso: 'Unidad', precio: '20 Bs'},
+            {nombre: 'Bomboncitos', peso: 'Unidad', precio: '5 Bs'},
+            {nombre: 'Licor', peso: 'Litro', precio: '70 Bs'},
+            {nombre: 'Licor', peso: 'Pichón', precio: '25 Bs'},
+            {nombre: 'Licor', peso: '0.70', precio: '50 Bs'},
+            {nombre: 'Lámina Papel Bon', peso: 'Unidad', precio: '15 Bs'},
+            {nombre: 'Cepillo de Barrer', peso: 'Unidad', precio: '170 Bs'},
+            {nombre: 'Chupeta', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Brillo', peso: 'Unidad', precio: '30 Bs'},
+            {nombre: 'Bandeja de Pollo', peso: 'Unidad', precio: '220 Bs'},
+            {nombre: 'Mr Zero Tatu', peso: 'Unidad', precio: '5 Bs'},
+            {nombre: 'Jugo Pequeño de Cartón', peso: 'Unidad', precio: '30 Bs'},
+            {nombre: 'Catalina', peso: 'Unidad', precio: '10 Bs'},
+            {nombre: 'Maní', peso: 'Unidad', precio: '15 Bs'},
+        ];
+
+        // Función para cargar los productos en la tabla
+        function loadProducts(productsArray) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+            
+            productsArray.forEach(product => {
+                const row = `
+                    <tr>
+                        <td>${product.nombre}</td>
+                        <td>${product.peso}</td>
+                        <td>${product.precio}</td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        // Función de búsqueda
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const filteredProducts = products.filter(product => {
+                return (
+                    product.nombre.toLowerCase().includes(searchTerm) ||
+                    product.peso.toLowerCase().includes(searchTerm) ||
+                    product.precio.toLowerCase().includes(searchTerm)
+                );
+            });
+            loadProducts(filteredProducts);
+        }
+
+        // Event listener para el buscador
+        document.getElementById('searchInput').addEventListener('keyup', searchProducts);
+
+        // Cargar todos los productos al inicio
+        loadProducts(products);
+    </script>
+</body>
+</html>
